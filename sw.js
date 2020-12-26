@@ -6,7 +6,7 @@ const INMUTABLE_CACHE  = 'inmutable-v3';
 const STATIC_CACHE  = 'static-v3';
 
 const APP_SHELL = [
-    '/',
+    // '/',
     'index.html',
     'css/style.css',
     'img/favicon.ico',
