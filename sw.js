@@ -1,15 +1,15 @@
 //imports
 importScripts('js/sw-utils.js');
 
-const DYNAMIC_CACHE  = 'dynamic-v1';
-const INMUTABLE_CACHE  = 'inmutable-v1';
-const STATIC_CACHE  = 'static-v1';
+const DYNAMIC_CACHE  = 'dynamic-v3';
+const INMUTABLE_CACHE  = 'inmutable-v3';
+const STATIC_CACHE  = 'static-v3';
 
 const APP_SHELL = [
     '/',
-    '/index.html',
-    '/css/style.css',
-    'img/favico.ico',
+    'index.html',
+    'css/style.css',
+    'img/favicon.ico',
     'img/avatars/hulk.jpg',
     'img/avatars/ironman.jpg',
     'img/avatars/spiderman.jpg',
@@ -25,7 +25,7 @@ const APP_SHELL_INMUTABLE = [
     'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
     'css/style.css',
     'css/animate.css',
-    '/js/libs/jquery.js'
+    'js/libs/jquery.js'
 ];
 
 self.addEventListener('install', e => {
@@ -37,7 +37,7 @@ self.addEventListener('install', e => {
         cache.addAll(APP_SHELL_INMUTABLE)
     });
 
-    e.waitUntil(Promise.all([cacheInmutable, cacheStatic]));
+    e.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
 });
 
 self.addEventListener('activate', e => {
@@ -52,15 +52,16 @@ self.addEventListener('activate', e => {
     e.waitUntil(respuesta);
 });
 
-self.addEventListener('fetch', e => {
-    const respuesta = caches.match(e.request).then(res => {
-        if(res) {
+self.addEventListener( 'fetch', e => {
+    const respuesta = caches.match( e.request ).then( res => {
+        if ( res ) {
             return res;
         } else {
-            return fetch(e.request).then(newResp => {
-                return actualizaCacheDinamico(DYNAMIC_CACHE, e.rquest, newResp);
+            return fetch( e.request ).then( newRes => {
+                return actualizaCacheDinamico( DYNAMIC_CACHE, e.request, newRes );
             });
         }
-    })
-    e.respondWith(respuesta);
-})
+    });
+
+    e.respondWith( respuesta );
+});
